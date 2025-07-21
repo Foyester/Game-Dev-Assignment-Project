@@ -24,25 +24,27 @@ public class UnitSelector : MonoBehaviour
         {
             Vector3 worldPos = transform.position;
             Vector3Int cellPos = tilemap.WorldToCell(worldPos);
-            tileHighlighter.HighlightArea(cellPos, unit.movementRange);
-            Debug.Log($"Highlighting for {unit.unitName} at {cellPos}");
+            Vector3 cellCenterWorldPos = tilemap.GetCellCenterWorld(cellPos);  // center of that tile
+            Debug.Log($"Unit world pos: {worldPos}, snapped center: {cellCenterWorldPos}");
+            tileHighlighter.HighlightArea(cellPos, 2);
         }
     }
-    
-    
-    
-    ///private void OnMouseDown()
-    //{
-        //Debug.Log("Unit clicked: " + gameObject.name);
-
-        // Access the Unit component
-        //Unit unit = GetComponent<Unit>();
-        //if (unit != null)
-        //{
-            //Debug.Log("Selected Unit: " + unit.unitName + " | HP: " + unit.currentHP);
-        //}
-
-        // TODO: Highlight movement range, show UI, etc.
-    //}
 }
+
+
+
+///private void OnMouseDown()
+//{
+//Debug.Log("Unit clicked: " + gameObject.name);
+
+// Access the Unit component
+//Unit unit = GetComponent<Unit>();
+//if (unit != null)
+//{
+//Debug.Log("Selected Unit: " + unit.unitName + " | HP: " + unit.currentHP);
+//}
+
+// TODO: Highlight movement range, show UI, etc.
+//}
+
 

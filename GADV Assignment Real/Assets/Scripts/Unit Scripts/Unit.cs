@@ -6,7 +6,7 @@ public class Unit : MonoBehaviour
     public int maxHP = 10;
     public int currentHP;
     public int attack = 3;
-    public int movementRange = 3;
+    public int movementRange = 1;
 
     public bool hasMoved = false;
 
