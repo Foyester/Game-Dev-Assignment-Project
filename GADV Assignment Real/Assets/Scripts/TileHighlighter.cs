@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class TileHighlighter : MonoBehaviour
 {
-    public Tilemap highlightMap; 
-    public Tile highlightTile;   
+    public Tilemap highlightMap;   // Tilemap used for displaying highlights
+    public Tile highlightTile;     // Tile used to highlight valid tiles
 
     void Update()
     {
@@ -15,12 +15,11 @@ public class TileHighlighter : MonoBehaviour
         }
     }
 
-    
-    public void HighlightArea(Vector3Int centerOffset, int range)
+    public void HighlightArea(Vector3Int center, int range)
     {
         ClearHighlights();
 
-        List<Vector3Int> tilesInRange = GetHexRange(centerOffset, range);
+        List<Vector3Int> tilesInRange = GetSquareRange(center, range);
         foreach (var tilePos in tilesInRange)
         {
             highlightMap.SetTile(tilePos, highlightTile);
@@ -32,41 +31,30 @@ public class TileHighlighter : MonoBehaviour
         highlightMap.ClearAllTiles();
     }
 
-    
-    public List<Vector3Int> GetHexRange(Vector3Int centerOffset, int range)
+    public List<Vector3Int> GetSquareRange(Vector3Int center, int range)
     {
         List<Vector3Int> results = new List<Vector3Int>();
 
-        Vector2Int centerAxial = OffsetToAxial(centerOffset); // Convert to axial
-
         for (int dx = -range; dx <= range; dx++)
         {
-            for (int dy = Mathf.Max(-range, -dx - range); dy <= Mathf.Min(range, -dx + range); dy++)
+            for (int dy = -range; dy <= range; dy++)
             {
-                int dz = -dx - dy;
-                Vector2Int axial = new Vector2Int(centerAxial.x + dx, centerAxial.y + dy);
-                Vector3Int offset = AxialToOffset(axial); 
-                results.Add(offset);
+                // Use Manhattan distance
+                if (Mathf.Abs(dx) + Mathf.Abs(dy) <= range)
+                {
+                    Vector3Int tilePos = new Vector3Int(center.x + dx, center.y + dy, center.z);
+                    results.Add(tilePos);
+                }
             }
         }
 
         return results;
     }
 
-   
-    private Vector2Int OffsetToAxial(Vector3Int offset)
-    {
-        int q = offset.x;
-        int r = offset.y - ((offset.x - (offset.x & 1)) / 2); 
-        return new Vector2Int(q, r);
-    }
-
     
-    private Vector3Int AxialToOffset(Vector2Int axial)
+    public bool IsTileHighlighted(Vector3Int pos)
     {
-        int col = axial.x;
-        int row = axial.y + ((axial.x - (axial.x & 1)) / 2); 
-        return new Vector3Int(col, row, 0);
+        return highlightMap.GetTile(pos) == highlightTile;
     }
 }
 

@@ -1,50 +1,52 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+[RequireComponent(typeof(Unit))]
+[RequireComponent(typeof(UnitManager))]
 public class UnitSelector : MonoBehaviour
 {
     private TileHighlighter tileHighlighter;
+    private Tilemap tilemap;
+
     private Unit unit;
-    private Tilemap tilemap; // The tilemap used to get tile positions (e.g., terrain)
+    private UnitManager unitManager;
 
     private void Start()
     {
-        // Find the TileHighlighter in the scene
+        // Get required components
         tileHighlighter = FindObjectOfType<TileHighlighter>();
         unit = GetComponent<Unit>();
+        unitManager = GetComponent<UnitManager>();
 
-        // Optionally get the tilemap for position conversion (if needed)
-        tilemap = GameObject.Find("Ground Tilemap").GetComponent<Tilemap>();
+        // Get the main tilemap
+        GameObject tilemapGO = GameObject.Find("Ground Tilemap");
+        if (tilemapGO != null)
+        {
+            tilemap = tilemapGO.GetComponent<Tilemap>();
+        }
+        else
+        {
+            Debug.LogWarning("Ground Tilemap not found! Check the name of your tilemap object.");
+        }
     }
-
 
     private void OnMouseDown()
     {
-        if (tileHighlighter != null && unit != null)
+        // Only allow selection if it’s this unit’s turn
+        if (unitManager.CanActThisTurn())
         {
-            Vector3 worldPos = transform.position;
-            Vector3Int cellPos = tilemap.WorldToCell(worldPos);
-            Vector3 cellCenterWorldPos = tilemap.GetCellCenterWorld(cellPos);  // center of that tile
-            Debug.Log($"Unit world pos: {worldPos}, snapped center: {cellCenterWorldPos}");
-            tileHighlighter.HighlightArea(cellPos, 2);
+            // Get the unit's current grid position
+            Vector3Int cellPos = tilemap.WorldToCell(transform.position);
+
+            // Highlight all tiles it can move to
+            tileHighlighter.HighlightArea(cellPos, unit.movementRange);
+
+            // Ask the unit manager to enable movement mode
+            unitManager.TrySelect();
+        }
+        else
+        {
+            Debug.Log("This unit cannot act right now.");
         }
     }
 }
-
-
-
-///private void OnMouseDown()
-//{
-//Debug.Log("Unit clicked: " + gameObject.name);
-
-// Access the Unit component
-//Unit unit = GetComponent<Unit>();
-//if (unit != null)
-//{
-//Debug.Log("Selected Unit: " + unit.unitName + " | HP: " + unit.currentHP);
-//}
-
-// TODO: Highlight movement range, show UI, etc.
-//}
-
-

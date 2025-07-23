@@ -20,7 +20,7 @@ public class TileReader : MonoBehaviour
             if (!mapManager.terrainTilemap.HasTile(pos)) continue;
 
             TileBase tile = mapManager.terrainTilemap.GetTile(pos);
-            HexTileData data = new HexTileData();
+            TileData data = new TileData();
 
             if (tile.name.ToLower().Contains("mountain"))
             {

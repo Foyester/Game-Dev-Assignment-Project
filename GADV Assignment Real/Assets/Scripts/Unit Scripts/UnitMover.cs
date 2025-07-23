@@ -1,44 +1,82 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
+[RequireComponent(typeof(Unit))]
 public class UnitMover : MonoBehaviour
 {
-    public float moveSpeed = 5f;
-    public int movementRange = 3;
-    private bool canMove = false;
+    private Tilemap tilemap;
+    private TileHighlighter tileHighlighter;
+    private MapManager mapManager;
+    private Unit unit;
 
-    private Vector3 targetPosition;
+    private bool isMovementMode = false;
 
-    void Start()
+    private void Start()
     {
-        targetPosition = transform.position;
+        tilemap = GameObject.Find("Ground Tilemap").GetComponent<Tilemap>();
+        tileHighlighter = FindObjectOfType<TileHighlighter>();
+        mapManager = FindObjectOfType<MapManager>();
+        unit = GetComponent<Unit>();
     }
 
     void Update()
     {
-        if (canMove && Input.GetMouseButtonDown(1)) // Right-click to move
-        {
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mousePos.z = 0;
+        if (!isMovementMode)
+            return;
 
-            if (Vector3.Distance(transform.position, mousePos) <= movementRange)
+        // Use right-click to confirm movement instead of left-click
+        if (Input.GetMouseButtonDown(1)) // 1 = right mouse button
+        {
+            Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3Int clickedCell = tilemap.WorldToCell(mouseWorld);
+
+            if (tileHighlighter.IsTileHighlighted(clickedCell) &&
+                mapManager.CanMoveTo(clickedCell))
             {
-                targetPosition = mousePos;
-                Debug.Log("Moving to " + targetPosition);
+                MoveTo(clickedCell);
             }
         }
-
-        // Smooth movement
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
     }
 
+    // Called by UnitManager / UnitSelector after first click to allow movement
     public void EnableMovement()
     {
-        canMove = true;
+        if (unit.hasMoved)
+        {
+            Debug.Log("This unit has already moved this turn.");
+            return;
+        }
+
+        // Activate movement mode and wait for next click to move
+        isMovementMode = true;
+        Debug.Log("Movement mode enabled. Waiting for tile selection.");
     }
 
-    public void DisableMovement()
+    private void MoveTo(Vector3Int destination)
     {
-        canMove = false;
+        // Record the current tile so we can mark it free after move
+        Vector3Int currentCell = tilemap.WorldToCell(transform.position);
+
+        // Move the unit visually to the center of the clicked tile
+        transform.position = tilemap.GetCellCenterWorld(destination);
+
+        // Update tile occupancy in the MapManager
+        mapManager.SetTileOccupied(currentCell, false);    // Free old tile
+        mapManager.SetTileOccupied(destination, true);     // Occupy new tile
+
+        // Only now mark the unit as having moved
+        unit.hasMoved = true;
+
+        // Exit movement mode
+        isMovementMode = false;
+
+        // Clear highlights now that movement is complete
+        tileHighlighter.ClearHighlights();
+
+        Debug.Log($"Unit moved to: {destination}. Movement complete.");
     }
 }
+
+
+
 
