@@ -39,5 +39,9 @@ public class UnitManager : MonoBehaviour
             Debug.Log("Not your turn!");
         }
     }
+    public PlayerTeam GetTeam()
+    {
+        return team;
+    }
 }
 

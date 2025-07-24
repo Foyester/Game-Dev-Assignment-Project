@@ -22,18 +22,54 @@ public class UnitMover : MonoBehaviour
     void Update()
     {
         if (!isMovementMode)
-            return;
-
-        // Use right-click to confirm movement instead of left-click
-        if (Input.GetMouseButtonDown(1)) // 1 = right mouse button
         {
-            Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector3Int clickedCell = tilemap.WorldToCell(mouseWorld);
-
-            if (tileHighlighter.IsTileHighlighted(clickedCell) &&
-                mapManager.CanMoveTo(clickedCell))
+            // Outside movement mode, right-click could be an attack
+            if (Input.GetMouseButtonDown(1))
             {
-                MoveTo(clickedCell);
+                // Raycast to see if a unit was clicked
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+                if (hit.collider != null)
+                {
+                    GameObject clickedObj = hit.collider.gameObject;
+
+                    if (clickedObj != this.gameObject)
+                    {
+                        UnitCombat combat = GetComponent<UnitCombat>();
+                        if (combat != null)
+                        {
+                            combat.TryAttack(clickedObj);
+                        }
+                    }
+                }
+            }
+
+            return;
+        }
+
+        // Movement mode is active
+        if (Input.GetMouseButtonDown(1))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+            if (hit.collider != null)
+            {
+                GameObject clickedObj = hit.collider.gameObject;
+
+                //  Strong check to prevent self-targeting
+                if (clickedObj == this.gameObject)
+                {
+                    Debug.Log("Cannot attack yourself.");
+                    return;
+                }
+
+                UnitCombat combat = GetComponent<UnitCombat>();
+                if (combat != null)
+                {
+                    combat.TryAttack(clickedObj);
+                }
             }
         }
     }
