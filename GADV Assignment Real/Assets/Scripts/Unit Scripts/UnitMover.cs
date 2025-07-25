@@ -1,117 +1,78 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+
+
 [RequireComponent(typeof(Unit))]
 public class UnitMover : MonoBehaviour
 {
+    private Unit unit;
     private Tilemap tilemap;
     private TileHighlighter tileHighlighter;
     private MapManager mapManager;
-    private Unit unit;
+    private bool isReadyToMove = false;
+    private bool isAwaitingMoveClick = false;
 
-    private bool isMovementMode = false;
+
 
     private void Start()
     {
+        unit = GetComponent<Unit>();
         tilemap = GameObject.Find("Ground Tilemap").GetComponent<Tilemap>();
         tileHighlighter = FindObjectOfType<TileHighlighter>();
         mapManager = FindObjectOfType<MapManager>();
-        unit = GetComponent<Unit>();
     }
 
-    void Update()
+
+
+    public void PrepareForMovement()
     {
-        if (!isMovementMode)
-        {
-            // Outside movement mode, right-click could be an attack
-            if (Input.GetMouseButtonDown(1))
-            {
-                // Raycast to see if a unit was clicked
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+        // This is called AFTER highlighting. We are now waiting for the second click.
+        isAwaitingMoveClick = true;
+    }
 
-                if (hit.collider != null)
-                {
-                    GameObject clickedObj = hit.collider.gameObject;
 
-                    if (clickedObj != this.gameObject)
-                    {
-                        UnitCombat combat = GetComponent<UnitCombat>();
-                        if (combat != null)
-                        {
-                            combat.TryAttack(clickedObj);
-                        }
-                    }
-                }
-            }
-
+    public void HandleMovementInput()
+    {
+        if (!isAwaitingMoveClick || unit.currentState != Unit.UnitState.Moving)
             return;
-        }
 
-        // Movement mode is active
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(0)) // Second left click
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+            Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3Int clickedCell = tilemap.WorldToCell(mouseWorld);
 
-            if (hit.collider != null)
+            if (tileHighlighter.IsTileHighlighted(clickedCell) && mapManager.CanMoveTo(clickedCell))
             {
-                GameObject clickedObj = hit.collider.gameObject;
-
-                //  Strong check to prevent self-targeting
-                if (clickedObj == this.gameObject)
-                {
-                    Debug.Log("Cannot attack yourself.");
-                    return;
-                }
-
-                UnitCombat combat = GetComponent<UnitCombat>();
-                if (combat != null)
-                {
-                    combat.TryAttack(clickedObj);
-                }
+                MoveTo(clickedCell);
             }
         }
     }
 
-    // Called by UnitManager / UnitSelector after first click to allow movement
-    public void EnableMovement()
+
+
+    private void MoveTo(Vector3Int dest)
     {
-        if (unit.hasMoved)
-        {
-            Debug.Log("This unit has already moved this turn.");
-            return;
-        }
+        Vector3Int current = tilemap.WorldToCell(transform.position);
 
-        // Activate movement mode and wait for next click to move
-        isMovementMode = true;
-        Debug.Log("Movement mode enabled. Waiting for tile selection.");
-    }
+        // Snap position
+        transform.position = tilemap.GetCellCenterWorld(dest);
 
-    private void MoveTo(Vector3Int destination)
-    {
-        // Record the current tile so we can mark it free after move
-        Vector3Int currentCell = tilemap.WorldToCell(transform.position);
+        // Update map
+        mapManager.SetTileOccupied(current, false);
+        mapManager.SetTileOccupied(dest, true);
 
-        // Move the unit visually to the center of the clicked tile
-        transform.position = tilemap.GetCellCenterWorld(destination);
-
-        // Update tile occupancy in the MapManager
-        mapManager.SetTileOccupied(currentCell, false);    // Free old tile
-        mapManager.SetTileOccupied(destination, true);     // Occupy new tile
-
-        // Only now mark the unit as having moved
+        // Lock movement
         unit.hasMoved = true;
+        isAwaitingMoveClick = false;
 
-        // Exit movement mode
-        isMovementMode = false;
-
-        // Clear highlights now that movement is complete
+        // Transition to attack
         tileHighlighter.ClearHighlights();
-
-        Debug.Log($"Unit moved to: {destination}. Movement complete.");
+        unit.SetState(Unit.UnitState.Attacking);
     }
+
 }
+
 
 
 

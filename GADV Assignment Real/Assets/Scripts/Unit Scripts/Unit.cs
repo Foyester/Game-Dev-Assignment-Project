@@ -2,16 +2,23 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    public string unitName = "Soldier";
-    public int maxHP = 10;
-    public int currentHP;
-    public int attack = 3;
-    public int defense = 1;
-    public int movementRange = 1;
-    public int attackRange = 1;
+    public enum UnitState
+    {
+        Idle,
+        Moving,
+        Attacking,
+        Done
+    }
 
-    public bool hasMoved = false; 
-    public bool hasAttacked = false; 
+    public UnitState currentState = UnitState.Idle;
+
+
+    public int maxHP = 10;
+    public int currentHP = 10;
+    public int attack = 4;
+    public int defense = 2;
+    public int movementRange = 3;
+    public bool hasMoved = false;
 
     private void Start()
     {
@@ -21,17 +28,25 @@ public class Unit : MonoBehaviour
     public void TakeDamage(int dmg)
     {
         currentHP -= dmg;
-        Debug.Log($"{gameObject.name} took {dmg} damage. Remaining HP: {currentHP}");
+        Debug.Log($"{gameObject.name} takes {dmg} damage! HP: {currentHP}");
 
         if (currentHP <= 0)
         {
-            Die();
+            Debug.Log($"{gameObject.name} is dead!");
+            Destroy(gameObject);
         }
     }
 
-    private void Die()
+    public void SetState(UnitState newState)
     {
-        Debug.Log(unitName + " has been defeated.");
-        Destroy(gameObject);
+        Debug.Log($"{gameObject.name} changes state to {newState}");
+        currentState = newState;
     }
+
+    public bool CanAct()
+    {
+        return currentState == UnitState.Idle || currentState == UnitState.Moving || currentState == UnitState.Attacking;
+    }
+
 }
+

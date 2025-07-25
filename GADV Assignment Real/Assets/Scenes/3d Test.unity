@@ -236,6 +236,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1563985757068845641, guid: 21406698aac79fd4ba9688366f776183, type: 3}
+      propertyPath: defense
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 2079163163856120138, guid: 21406698aac79fd4ba9688366f776183, type: 3}
       propertyPath: team
       value: 1
@@ -6770,7 +6774,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 389e010795b49df44b1ed97df69fc39e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPlayer1Turn: 0
+  isPlayer1Turn: 1
 --- !u!4 &1657704293
 Transform:
   m_ObjectHideFlags: 0
@@ -6980,6 +6984,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 762232297307519473, guid: 21406698aac79fd4ba9688366f776183, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1563985757068845641, guid: 21406698aac79fd4ba9688366f776183, type: 3}
+      propertyPath: attack
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1563985757068845641, guid: 21406698aac79fd4ba9688366f776183, type: 3}
+      propertyPath: defense
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7534908972746010333, guid: 21406698aac79fd4ba9688366f776183, type: 3}
       propertyPath: m_Name
       value: UnitTest

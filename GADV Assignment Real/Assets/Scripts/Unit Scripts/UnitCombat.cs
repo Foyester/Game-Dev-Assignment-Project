@@ -5,43 +5,47 @@ using UnityEngine;
 public class UnitCombat : MonoBehaviour
 {
     private Unit unit;
-    private UnitManager unitManager;
+    private UnitManager manager;
 
     private void Start()
     {
         unit = GetComponent<Unit>();
-        unitManager = GetComponent<UnitManager>();
+        manager = GetComponent<UnitManager>();
     }
 
-    // Called when player right-clicks on a unit to attack it
-    public void TryAttack(GameObject targetGO)
+    public void HandleAttackInput()
     {
-        if (targetGO == null || targetGO == this.gameObject)
+        if (unit.currentState != Unit.UnitState.Attacking) return;
+
+        if (Input.GetMouseButtonDown(1))
         {
-            Debug.Log("Invalid target: can't attack self or null.");
-            return;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+            if (hit.collider != null)
+            {
+                GameObject target = hit.collider.gameObject;
+
+                if (target == this.gameObject) return;
+
+                Unit targetUnit = target.GetComponent<Unit>();
+                UnitManager targetManager = target.GetComponent<UnitManager>();
+
+                if (targetUnit != null && targetManager != null &&
+                    targetManager.GetTeam() != manager.GetTeam())
+                {
+                    int damage = Mathf.Max(0, unit.attack - targetUnit.defense);
+                    targetUnit.TakeDamage(damage);
+
+                    Debug.Log($"{gameObject.name} attacked {target.name} for {damage}!");
+
+                    // End the unit's turn
+                    unit.SetState(Unit.UnitState.Done);
+                }
+            }
         }
-
-        Unit targetUnit = targetGO.GetComponent<Unit>();
-        UnitManager targetManager = targetGO.GetComponent<UnitManager>();
-
-        if (targetUnit == null || targetManager == null)
-        {
-            Debug.Log("Target is not a valid unit.");
-            return;
-        }
-
-        if (targetManager.GetTeam() == unitManager.GetTeam())
-        {
-            Debug.Log("Can't attack friendly units.");
-            return;
-        }
-
-        // Basic deterministic damage
-        int rawDamage = Mathf.Max(0, unit.attack - targetUnit.defense);
-        Debug.Log($"{gameObject.name} attacks {targetGO.name} for {rawDamage} damage!");
-
-        targetUnit.TakeDamage(rawDamage);
     }
+
 }
+
 
