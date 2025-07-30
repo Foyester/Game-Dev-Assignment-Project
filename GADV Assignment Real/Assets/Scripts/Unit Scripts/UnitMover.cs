@@ -1,7 +1,6 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-
-
 
 [RequireComponent(typeof(Unit))]
 public class UnitMover : MonoBehaviour
@@ -25,12 +24,17 @@ public class UnitMover : MonoBehaviour
 
 
 
+
     public void PrepareForMovement()
     {
-        // This is called AFTER highlighting. We are now waiting for the second click.
-        isAwaitingMoveClick = true;
+        StartCoroutine(EnableMoveInputNextFrame());
     }
 
+    private IEnumerator EnableMoveInputNextFrame()
+    {
+        yield return null; // Wait one frame
+        isAwaitingMoveClick = true;
+    }
 
     public void HandleMovementInput()
     {
@@ -70,6 +74,7 @@ public class UnitMover : MonoBehaviour
         tileHighlighter.ClearHighlights();
         unit.SetState(Unit.UnitState.Attacking);
     }
+
 
 }
 

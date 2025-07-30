@@ -51,7 +51,7 @@ public class TileHighlighter : MonoBehaviour
         return results;
     }
 
-    
+
     public bool IsTileHighlighted(Vector3Int pos)
     {
         return highlightMap.GetTile(pos) == highlightTile;
