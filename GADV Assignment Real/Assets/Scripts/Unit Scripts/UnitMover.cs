@@ -9,7 +9,7 @@ public class UnitMover : MonoBehaviour
     private Tilemap tilemap;
     private TileHighlighter tileHighlighter;
     private MapManager mapManager;
-    private bool isReadyToMove = false;
+    
     private bool isAwaitingMoveClick = false;
 
 

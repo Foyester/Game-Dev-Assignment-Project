@@ -33,7 +33,7 @@ public class Unit : MonoBehaviour
         if (currentHP <= 0)
         {
             Debug.Log($"{gameObject.name} is dead!");
-            Destroy(gameObject);
+            Die();
         }
     }
 
@@ -47,6 +47,23 @@ public class Unit : MonoBehaviour
     {
         return currentState == UnitState.Idle || currentState == UnitState.Moving || currentState == UnitState.Attacking;
     }
+
+    private void Die()
+    {
+        VictoryCondition vm = FindObjectOfType<VictoryCondition>();
+        if (vm != null)
+        {
+            Debug.Log("VictoryCondition found. Starting coroutine...");
+            vm.StartCoroutine(vm.CheckForWinAfterDelay());
+        }
+        else
+        {
+            Debug.LogWarning("VictoryCondition not found!");
+        }
+
+        Destroy(gameObject);
+    }
+
 
 }
 

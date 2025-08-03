@@ -1,15 +1,23 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Unit))]
 public class UnitManager : MonoBehaviour
 {
     public enum PlayerTeam { Player1, Player2 }
-    public PlayerTeam team;
+    public PlayerTeam team;  // Assign this in the Inspector!
 
     private TurnManager turnManager;
 
-    void Start()
+    private void Start()
     {
         turnManager = FindObjectOfType<TurnManager>();
+
+        // Debug safety check
+        if (!turnManager)
+            Debug.LogWarning("TurnManager not found!");
+
+        // Debug team assignment
+        Debug.Log($"{gameObject.name} assigned to team: {team}");
     }
 
     public bool CanActThisTurn()
@@ -22,7 +30,13 @@ public class UnitManager : MonoBehaviour
     {
         return team;
     }
+
+    private void OnDestroy()
+    {
+        Debug.Log($"{gameObject.name} was destroyed. Team: {team}");
+    }
 }
+
 
 
 
