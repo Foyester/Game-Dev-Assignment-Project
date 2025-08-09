@@ -86,8 +86,6 @@ GameObject:
   - component: {fileID: 7036086840403091406}
   - component: {fileID: 4976460835002190904}
   - component: {fileID: 2018621703165759839}
-  - component: {fileID: 5450972202859751894}
-  - component: {fileID: 371170421093216342}
   m_Layer: 5
   m_Name: DraggableUnitPrefab
   m_TagString: Untagged
@@ -154,34 +152,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5450972202859751894
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5767373680244359491}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42998a0d64444dc45ba661b6dd0f0db6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  iconImage: {fileID: 4353262534177265041}
-  nameText: {fileID: 7578959737484960686}
-  unitData: {fileID: 0}
---- !u!114 &371170421093216342
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5767373680244359491}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e808c448b2235ab40a78304a9d0a42d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unitData: {fileID: 0}
 --- !u!1 &8480515014797326453
 GameObject:
   m_ObjectHideFlags: 0
