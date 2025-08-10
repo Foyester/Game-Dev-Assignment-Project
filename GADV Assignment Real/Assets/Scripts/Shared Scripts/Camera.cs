@@ -39,3 +39,13 @@ public class CameraMovement : MonoBehaviour
     }
 }
 
+public Vector2 minCameraPos;  // bottom-left corner limit
+    public Vector2 maxCameraPos;  // top-right corner limit
+
+void LateUpdate()
+{
+    Vector3 pos = mainCamera.transform.position;
+    pos.x = Mathf.Clamp(pos.x, minCameraPos.x, maxCameraPos.x);
+    pos.y = Mathf.Clamp(pos.y, minCameraPos.y, maxCameraPos.y);
+    mainCamera.transform.position = pos;
+}

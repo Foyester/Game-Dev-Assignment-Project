@@ -86,6 +86,8 @@ GameObject:
   - component: {fileID: 7036086840403091406}
   - component: {fileID: 4976460835002190904}
   - component: {fileID: 2018621703165759839}
+  - component: {fileID: 7503872797589993987}
+  - component: {fileID: 5041389597330510064}
   m_Layer: 5
   m_Name: DraggableUnitPrefab
   m_TagString: Untagged
@@ -152,6 +154,34 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7503872797589993987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5767373680244359491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f067ea2188cdefa43babc03a182ab2e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitData: {fileID: 0}
+  gridPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &5041389597330510064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5767373680244359491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fc23a315a8a3784d87d35ffc807cd31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitImage: {fileID: 4353262534177265041}
+  unitName: {fileID: 7578959737484960686}
 --- !u!1 &8480515014797326453
 GameObject:
   m_ObjectHideFlags: 0
