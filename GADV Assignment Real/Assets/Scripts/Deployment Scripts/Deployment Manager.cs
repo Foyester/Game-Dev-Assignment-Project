@@ -24,6 +24,9 @@ public class DeploymentManager : MonoBehaviour
     private UnitData selectedUnit;
     private Tilemap activeDeployTM;
 
+    // Track deployed units by tile position for double stacking prevention and recall
+    private Dictionary<Vector3Int, GameObject> deployedUnits = new Dictionary<Vector3Int, GameObject>();
+
     void Start()
     {
         Debug.Log("DeploymentManager Start: Loading drafted units from DraftData.");
@@ -64,43 +67,99 @@ public class DeploymentManager : MonoBehaviour
 
     void Update()
     {
-        if (selectedUnit != null && Input.GetMouseButtonDown(0))
+        Debug.Log("Update called");
+
+        // Safety checks and logs first
+        if (DeploymentData.Instance == null)
+        {
+            Debug.LogError("DeploymentData.Instance is NULL! Did you forget to put DeploymentData in the scene?");
+            return;
+        }
+        else
+        {
+            Debug.Log("DeploymentData.Instance found");
+        }
+
+        if (player1DeployTM == null)
+        {
+            Debug.LogError("Player1DeployTM is NULL! Did you assign the Tilemap in the Inspector?");
+            return;
+        }
+        else
+        {
+            Debug.Log("Player1DeployTM reference found");
+        }
+        if (player2DeployTM == null)
+        {
+            Debug.LogError("Player2DeployTM is NULL! Did you assign the Tilemap in the Inspector?");
+            return;
+        }
+        else
+        {
+            Debug.Log("Player2DeployTM reference found");
+        }
+
+        if (Input.GetMouseButtonDown(0))
         {
             Vector3 worldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
             Vector3Int cellPos = activeDeployTM.WorldToCell(worldPos);
 
-            Debug.Log($"Clicked cell position: {cellPos}");
-
-            if (activeDeployTM.HasTile(cellPos))
+            // 1) Check if clicking on existing deployed unit to recall (undeploy) it
+            if (deployedUnits.ContainsKey(cellPos))
             {
-                Debug.Log("Valid deployment tile found.");
+                Debug.Log($"Clicked deployed unit at {cellPos}, recalling...");
+                RecallUnit(cellPos);
+                return;  // Early exit: don't place another unit this click
+            }
 
-                GameObject placedObj = Instantiate(placeholderPrefab, placeholderParent);
-                placedObj.transform.position = activeDeployTM.GetCellCenterWorld(cellPos);
+            // 2) If no deployed unit clicked, attempt to place selected unit (if any)
+            if (selectedUnit != null)
+            {
+                if (activeDeployTM.HasTile(cellPos))
+                {
+                    Debug.Log("Valid deployment tile found.");
 
-                DeploymentUnit du = placedObj.GetComponent<DeploymentUnit>();
-                du.Setup(selectedUnit, cellPos);
+                    // Prevent double-stacking
+                    if (deployedUnits.ContainsKey(cellPos))
+                    {
+                        Debug.LogWarning($"Tile {cellPos} already occupied! Cannot deploy unit here.");
+                        return;
+                    }
 
-                Debug.Log($"Placing visual placeholder for unit {selectedUnit.unitName} at {cellPos}.");
+                    GameObject placedObj = Instantiate(placeholderPrefab, placeholderParent);
+                    placedObj.transform.position = activeDeployTM.GetCellCenterWorld(cellPos);
 
-                DeploymentData.Instance.AddDeployment(
-                    currentPlayer == 1,
-                    selectedUnit,
-                    cellPos
-                );
+                    DeploymentUnit du = placedObj.GetComponent<DeploymentUnit>();
+                    du.Setup(selectedUnit, cellPos);
 
-                Debug.Log($"Added deployment data for unit {selectedUnit.unitName} at {cellPos}.");
+                    Debug.Log($"Placing visual placeholder for unit {selectedUnit.unitName} at {cellPos}.");
 
-                RemoveUnitFromUI(selectedUnit);
+                    DeploymentData.Instance.AddDeployment(
+                        currentPlayer == 1,
+                        selectedUnit,
+                        cellPos
+                    );
 
-                selectedUnit = null;
+                    deployedUnits[cellPos] = placedObj; // Track deployed unit
+
+                    Debug.Log($"Added deployment data for unit {selectedUnit.unitName} at {cellPos}.");
+
+                    RemoveUnitFromUI(selectedUnit);
+
+                    selectedUnit = null;
+                }
+                else
+                {
+                    Debug.LogWarning("Invalid deployment tile! Cannot place unit here.");
+                }
             }
             else
             {
-                Debug.LogWarning("Invalid deployment tile! Cannot place unit here.");
+                Debug.Log("No unit selected to place.");
             }
         }
     }
+
 
     void RemoveUnitFromUI(UnitData unit)
     {
@@ -116,6 +175,39 @@ public class DeploymentManager : MonoBehaviour
         }
 
         SetupDeploymentUI();
+    }
+
+    // Recall deployed unit and return it to selection list
+    private void RecallUnit(Vector3Int cellPos)
+    {
+        if (deployedUnits.TryGetValue(cellPos, out GameObject unitObj))
+        {
+            DeploymentUnit du = unitObj.GetComponent<DeploymentUnit>();
+
+            // Remove deployment data record
+            DeploymentData.Instance.RemoveDeployment(currentPlayer == 1, du.unitData, cellPos);
+
+            Debug.Log($"Recalling unit {du.unitData.unitName} from {cellPos} back to selection.");
+
+            // Return unit to player's deployment list
+            if (currentPlayer == 1)
+            {
+                player1Units.Add(du.unitData);
+            }
+            else
+            {
+                player2Units.Add(du.unitData);
+            }
+
+            Destroy(unitObj);
+            deployedUnits.Remove(cellPos);
+
+            SetupDeploymentUI();
+        }
+        else
+        {
+            Debug.LogWarning($"No deployed unit found at {cellPos} to recall.");
+        }
     }
 
     public void ConfirmDeployment()
@@ -150,6 +242,7 @@ public class DeploymentManager : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
     }
 }
+
 
 
 

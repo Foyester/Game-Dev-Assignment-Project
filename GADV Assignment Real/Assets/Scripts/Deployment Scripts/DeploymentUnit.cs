@@ -9,7 +9,23 @@ public class DeploymentUnit : MonoBehaviour
     {
         unitData = data;
         gridPosition = pos;
-        GetComponent<SpriteRenderer>().sprite = data.icon;
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        if (sr == null)
+        {
+            Debug.LogWarning("No SpriteRenderer found, searching children...");
+            sr = GetComponentInChildren<SpriteRenderer>();
+        }
+
+        if (sr != null)
+        {
+            sr.sprite = data.icon;
+            Debug.Log("Sprite assigned: " + data.icon.name);
+        }
+        else
+        {
+            Debug.LogError("No SpriteRenderer found at all!");
+        }
+        sr.color = new Color(22f, 22f, 22f, 22f);
+        transform.localScale = Vector3.one * 22f;
     }
 }
-
