@@ -1,21 +1,26 @@
 using UnityEngine;
+using UnityEngine.UI; // Needed for UI Button
 
 public class TurnController : MonoBehaviour
 {
+    [SerializeField] private Button endTurnButton; // Assign in Inspector
+
     private TurnManager turnManager;
     private Unit[] allUnits;
 
     void Start()
     {
+        Debug.Log("TurnController Start called.");
         turnManager = FindObjectOfType<TurnManager>();
-    }
 
-    void Update()
-    {
-        // TEMPORARY: Press 'E' to end the turn
-        if (Input.GetKeyDown(KeyCode.E))
+        
+        if (endTurnButton != null)
         {
-            EndTurn();
+            endTurnButton.onClick.AddListener(EndTurn);
+        }
+        else
+        {
+            Debug.LogWarning("End Turn Button is not assigned in the inspector!");
         }
     }
 
@@ -47,4 +52,5 @@ public class TurnController : MonoBehaviour
         turnManager.EndTurn();
     }
 }
+
 

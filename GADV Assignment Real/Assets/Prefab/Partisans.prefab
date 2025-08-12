@@ -16,8 +16,9 @@ GameObject:
   - component: {fileID: 6185998042131136025}
   - component: {fileID: 4076127530666391549}
   - component: {fileID: 677936334610446467}
+  - component: {fileID: 4389724351725296946}
   m_Layer: 0
-  m_Name: Quixote
+  m_Name: Partisans
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +34,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 200.45299, y: 93.31001, z: -0.4964}
-  m_LocalScale: {x: 21.814161, y: 21.814161, z: 21.814161}
+  m_LocalScale: {x: 27, y: 27, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -79,7 +80,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Sprite: {fileID: 21300000, guid: 03b4282fc5b6fcc4bb4e07e9fb4c7fd9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 285ac985014f7344a97c433c816f8ec2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -103,11 +104,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
-  maxHP: 10
+  maxHP: 35
   currentHP: 0
-  attack: 5
-  defense: 5
-  movementRange: 2
+  attack: 15
+  defense: 0
+  movementRange: 3
+  attackRange: 1
   hasMoved: 0
 --- !u!114 &718396286548218377
 MonoBehaviour:
@@ -203,3 +205,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c497807cc822d6e439e8ff1f9beb6f39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4389724351725296946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8026510012102574106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c418f7dcd51259145a463a055dc56ee1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrainTilemap: {fileID: 0}

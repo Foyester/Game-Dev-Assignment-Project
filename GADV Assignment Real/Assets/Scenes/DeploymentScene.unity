@@ -444,6 +444,7 @@ MonoBehaviour:
   player2CameraPos: {fileID: 371272204}
   unitUIPanel: {fileID: 1263608096}
   unitUIElementPrefab: {fileID: 5767373680244359491, guid: 7a9aaab516f7fee4b849d3f558d2c868, type: 3}
+  confirmButton: {fileID: 1555297938}
 --- !u!1 &297143003
 GameObject:
   m_ObjectHideFlags: 0
@@ -795,7 +796,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1344930580}
   m_HandleRect: {fileID: 1344930579}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

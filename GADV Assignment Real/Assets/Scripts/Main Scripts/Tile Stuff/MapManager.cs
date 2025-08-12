@@ -12,8 +12,21 @@ public class MapManager : MonoBehaviour
 
     private void Awake()
     {
+        if (terrainTilemap == null)
+        {
+            
+            terrainTilemap = GameObject.Find("Ground Tilemap").GetComponent<Tilemap>();
+
+            if (terrainTilemap == null)
+            {
+                Debug.LogError("Terrain Tilemap not assigned and could not be found!");
+                return;
+            }
+        }
+
         InitializeTileData();
     }
+
 
     private void InitializeTileData()
     {

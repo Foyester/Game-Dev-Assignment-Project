@@ -18,6 +18,7 @@ public class Unit : MonoBehaviour
     public int attack = 4;
     public int defense = 2;
     public int movementRange = 3;
+    public int attackRange = 3;
     public bool hasMoved = false;
 
     private void Start()

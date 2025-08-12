@@ -15,5 +15,7 @@ MonoBehaviour:
   unitName: Diesel Templar
   cost: 3
   icon: {fileID: 21300000, guid: 03b4282fc5b6fcc4bb4e07e9fb4c7fd9, type: 3}
-  prefab: {fileID: 0}
+  prefab: {fileID: 8026510012102574106, guid: 5f2f6527e2713a745a0cb8a2d803d211, type: 3}
   maxCopies: 2
+  isDeployed: 0
+  deployedTile: {x: 0, y: 0, z: 0}

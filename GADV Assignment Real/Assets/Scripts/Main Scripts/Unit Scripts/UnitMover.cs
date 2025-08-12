@@ -1,18 +1,18 @@
-using System.Collections;
-using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine;
+using System.Collections;
 
-[RequireComponent(typeof(Unit))]
 public class UnitMover : MonoBehaviour
 {
     private Unit unit;
     private Tilemap tilemap;
     private TileHighlighter tileHighlighter;
     private MapManager mapManager;
-    
+
     private bool isAwaitingMoveClick = false;
 
-
+    // New flag to track movement completion
+    public bool hasFinishedMoving { get; private set; } = false;
 
     private void Start()
     {
@@ -22,11 +22,9 @@ public class UnitMover : MonoBehaviour
         mapManager = FindObjectOfType<MapManager>();
     }
 
-
-
-
     public void PrepareForMovement()
     {
+        hasFinishedMoving = false;  // Reset flag when starting new movement
         StartCoroutine(EnableMoveInputNextFrame());
     }
 
@@ -41,8 +39,11 @@ public class UnitMover : MonoBehaviour
         if (!isAwaitingMoveClick || unit.currentState != Unit.UnitState.Moving)
             return;
 
+        Debug.Log("HandleMovementInput called");
+
         if (Input.GetMouseButtonDown(0)) // Second left click
         {
+            Debug.Log("Mouse clicked in movement input");
             Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector3Int clickedCell = tilemap.WorldToCell(mouseWorld);
 
@@ -52,8 +53,6 @@ public class UnitMover : MonoBehaviour
             }
         }
     }
-
-
 
     private void MoveTo(Vector3Int dest)
     {
@@ -70,13 +69,15 @@ public class UnitMover : MonoBehaviour
         unit.hasMoved = true;
         isAwaitingMoveClick = false;
 
-        // Transition to attack
+        // Mark movement finished
+        hasFinishedMoving = true;
+
+        // Transition to attack state
         tileHighlighter.ClearHighlights();
         unit.SetState(Unit.UnitState.Attacking);
     }
-
-
 }
+
 
 
 

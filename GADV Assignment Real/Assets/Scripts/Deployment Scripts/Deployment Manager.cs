@@ -5,17 +5,23 @@ using System.Collections.Generic;
 
 public class DeploymentManager : MonoBehaviour
 {
+    [Header("Tilemaps & Camera")]
     public Tilemap player1DeployTM;
     public Tilemap player2DeployTM;
     public Camera mainCamera;
+
+    [Header("Placement Objects")]
     public Transform placeholderParent;
     public GameObject placeholderPrefab;
 
+    [Header("Camera Positions")]
     public Transform player1CameraPos;
     public Transform player2CameraPos;
 
+    [Header("UI")]
     public Transform unitUIPanel;
     public GameObject unitUIElementPrefab;
+    public Button confirmButton; // <-- New: assign in Inspector
 
     private int currentPlayer = 1;
     private List<UnitData> player1Units;
@@ -24,7 +30,7 @@ public class DeploymentManager : MonoBehaviour
     private UnitData selectedUnit;
     private Tilemap activeDeployTM;
 
-    // Track deployed units by tile position for double stacking prevention and recall
+    // Track deployed units for double stacking prevention and recall
     private Dictionary<Vector3Int, GameObject> deployedUnits = new Dictionary<Vector3Int, GameObject>();
 
     void Start()
@@ -35,6 +41,18 @@ public class DeploymentManager : MonoBehaviour
 
         Debug.Log("Clearing previous deployments in DeploymentData.");
         DeploymentData.Instance.ClearDeployments();
+
+        // Hook up confirm button if assigned
+        if (confirmButton != null)
+        {
+            confirmButton.onClick.RemoveAllListeners();
+            confirmButton.onClick.AddListener(ConfirmDeployment);
+            Debug.Log("Confirm button hooked up in Start().");
+        }
+        else
+        {
+            Debug.LogWarning("Confirm button not assigned in the Inspector!");
+        }
 
         SetupDeploymentUI();
         SwitchToPlayer(1);

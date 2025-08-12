@@ -15,5 +15,7 @@ MonoBehaviour:
   unitName: Partisan
   cost: 1
   icon: {fileID: 21300000, guid: 5f52c6996acd24a42a2bba96fbd6004e, type: 3}
-  prefab: {fileID: 0}
+  prefab: {fileID: 8026510012102574106, guid: 900e66b8bd318eb408839bccbd53fdd0, type: 3}
   maxCopies: 4
+  isDeployed: 0
+  deployedTile: {x: 0, y: 0, z: 0}

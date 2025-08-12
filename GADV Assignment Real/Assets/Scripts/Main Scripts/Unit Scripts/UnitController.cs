@@ -11,6 +11,7 @@ public class UnitController : MonoBehaviour
     private UnitCombat combat;
     private TileHighlighter tileHighlighter;
     private Tilemap tilemap;
+    private bool movementFinishedHandled = false;
 
     private void Start()
     {
@@ -33,26 +34,53 @@ public class UnitController : MonoBehaviour
 
         if (unit.currentState == Unit.UnitState.Idle)
         {
-            // Highlight movement range
             Vector3Int cellPos = tilemap.WorldToCell(transform.position);
-            tileHighlighter.HighlightArea(cellPos, unit.movementRange);
+            Debug.Log($"Highlighting movement range for {unit.name} at {cellPos} with range {unit.movementRange}");
+            tileHighlighter.HighlightArea(cellPos, unit.movementRange, tileHighlighter.movementTile);
 
-            // Mark unit as entering movement mode (but NOT moving yet)
             unit.SetState(Unit.UnitState.Moving);
-            mover.PrepareForMovement(); // <- new method, explained below
+            mover.PrepareForMovement();
         }
     }
 
-    void Update()
+    private void Update()
     {
         if (unit.currentState == Unit.UnitState.Moving)
         {
             mover.HandleMovementInput();
+
+            if (mover.hasFinishedMoving && !movementFinishedHandled)
+            {
+                movementFinishedHandled = true;
+                TryEnterAttackState();
+            }
         }
         else if (unit.currentState == Unit.UnitState.Attacking)
         {
             combat.HandleAttackInput();
+
+            // Highlight attack range while attacking
+            Vector3Int cellPos = tilemap.WorldToCell(transform.position);
+            tileHighlighter.HighlightArea(cellPos, unit.attackRange, tileHighlighter.attackTile);
+        }
+        else
+        {
+            movementFinishedHandled = false; // reset when not moving
         }
     }
 
+    private void TryEnterAttackState()
+    {
+        if (combat.HasValidTargets())  // Make sure this returns true if enemies are in range
+        {
+            unit.SetState(Unit.UnitState.Attacking);
+            Debug.Log($"{unit.name} entered attack state.");
+        }
+        else
+        {
+            unit.SetState(Unit.UnitState.Done);
+            Debug.Log($"{unit.name} has no targets and ends its turn.");
+        }
+    }
 }
+

@@ -4,8 +4,12 @@ using System.Collections.Generic;
 
 public class TileHighlighter : MonoBehaviour
 {
+    [Header("Tilemaps")]
     public Tilemap highlightMap;   // Tilemap used for displaying highlights
-    public Tile highlightTile;     // Tile used to highlight valid tiles
+
+    [Header("Highlight Tiles")]
+    public Tile movementTile;      // Tile used to highlight movement range
+    public Tile attackTile;        // Tile used to highlight attack range
 
     void Update()
     {
@@ -15,14 +19,34 @@ public class TileHighlighter : MonoBehaviour
         }
     }
 
-    public void HighlightArea(Vector3Int center, int range)
+    /// <summary>
+    /// Highlights all tiles within a movement range.
+    /// </summary>
+    public void HighlightMovementRange(Vector3Int center, int range)
     {
+        HighlightArea(center, range, movementTile);
+    }
+
+    /// <summary>
+    /// Highlights all tiles within an attack range.
+    /// </summary>
+    public void HighlightAttackRange(Vector3Int center, int range)
+    {
+        HighlightArea(center, range, attackTile);
+    }
+
+    /// <summary>
+    /// Generic highlight function that takes a tile type.
+    /// </summary>
+    public void HighlightArea(Vector3Int center, int range, Tile tileToUse)
+    {
+        Debug.Log($"Highlighting {tileToUse.name} at {center} with range {range}");
         ClearHighlights();
 
         List<Vector3Int> tilesInRange = GetSquareRange(center, range);
         foreach (var tilePos in tilesInRange)
         {
-            highlightMap.SetTile(tilePos, highlightTile);
+            highlightMap.SetTile(tilePos, tileToUse);
         }
     }
 
@@ -51,13 +75,12 @@ public class TileHighlighter : MonoBehaviour
         return results;
     }
 
-
     public bool IsTileHighlighted(Vector3Int pos)
     {
-        return highlightMap.GetTile(pos) == highlightTile;
+        TileBase tileAtPos = highlightMap.GetTile(pos);
+        return tileAtPos == movementTile || tileAtPos == attackTile;
     }
 }
-
 
 
 
