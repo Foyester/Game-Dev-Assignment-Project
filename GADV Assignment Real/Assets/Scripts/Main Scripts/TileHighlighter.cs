@@ -1,3 +1,9 @@
+/// TileHighlighter is a script that spawns the hihglight tiles that show a unit's range and attack based off it's data from Unit.cs. A good chunk of the code
+/// is cross-referencing with an impassible terrain tilemap and not generating tiles if it overlaps. It's doesn't actually clear the tiles itself after generation
+/// rather calling a method from highlightmap to delete. Also manhattan distance is a life saver compared to the math i tried with hexagons like omg it so much easier
+
+
+
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Collections.Generic;
@@ -5,26 +11,22 @@ using System.Collections.Generic;
 public class TileHighlighter : MonoBehaviour
 {
     [Header("Tilemaps")]
-    public Tilemap highlightMap;   // Tilemap used for displaying highlights
+    public Tilemap highlightMap;   
+    public Tilemap impassableTilemap; 
 
     [Header("Highlight Tiles")]
-    public Tile movementTile;      // Tile used to highlight movement range
-    public Tile attackTile;        // Tile used to highlight attack range
+    public Tile movementTile;      
+    public Tile attackTile;        
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            ClearHighlights();
-        }
-    }
+    
+    
 
     /// <summary>
     /// Highlights all tiles within a movement range.
     /// </summary>
     public void HighlightMovementRange(Vector3Int center, int range)
     {
-        HighlightArea(center, range, movementTile);
+        HighlightArea(center, range, movementTile, true); // true = check impassable
     }
 
     /// <summary>
@@ -32,13 +34,13 @@ public class TileHighlighter : MonoBehaviour
     /// </summary>
     public void HighlightAttackRange(Vector3Int center, int range)
     {
-        HighlightArea(center, range, attackTile);
+        HighlightArea(center, range, attackTile, false); // false = ignore impassable
     }
 
     /// <summary>
-    /// Generic highlight function that takes a tile type.
+    /// Generic highlight function that takes a tile type and an impassable check flag.
     /// </summary>
-    public void HighlightArea(Vector3Int center, int range, Tile tileToUse)
+    public void HighlightArea(Vector3Int center, int range, Tile tileToUse, bool blockOnImpassable)
     {
         Debug.Log($"Highlighting {tileToUse.name} at {center} with range {range}");
         ClearHighlights();
@@ -46,6 +48,10 @@ public class TileHighlighter : MonoBehaviour
         List<Vector3Int> tilesInRange = GetSquareRange(center, range);
         foreach (var tilePos in tilesInRange)
         {
+            // Skip impassable tiles if required
+            if (blockOnImpassable && impassableTilemap != null && impassableTilemap.HasTile(tilePos))
+                continue;
+
             highlightMap.SetTile(tilePos, tileToUse);
         }
     }
@@ -63,7 +69,7 @@ public class TileHighlighter : MonoBehaviour
         {
             for (int dy = -range; dy <= range; dy++)
             {
-                // Use Manhattan distance
+                
                 if (Mathf.Abs(dx) + Mathf.Abs(dy) <= range)
                 {
                     Vector3Int tilePos = new Vector3Int(center.x + dx, center.y + dy, center.z);
@@ -81,6 +87,10 @@ public class TileHighlighter : MonoBehaviour
         return tileAtPos == movementTile || tileAtPos == attackTile;
     }
 }
+
+
+
+
 
 
 

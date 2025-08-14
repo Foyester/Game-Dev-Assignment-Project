@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿///this is the combat brain for a unit, it only engages when in the attack state and checks if it's allowed to via range and team membership
+///and handles turn progression once the attack is done by forcing a done state since the flow goes movement->attack_>done
+using UnityEngine;
 using UnityEngine.Tilemaps;
 
 [RequireComponent(typeof(Unit))]
@@ -9,14 +11,14 @@ public class UnitCombat : MonoBehaviour
     private Unit unit;
     private UnitManager manager;
     private Tilemap terrainTilemap;
-    private TileHighlighter tileHighlighter;  // Added field
+    private TileHighlighter tileHighlighter;  
 
     private void Start()
     {
         unit = GetComponent<Unit>();
         manager = GetComponent<UnitManager>();
 
-        // Get terrain tilemap from MapManager
+        
         MapManager mapManager = FindObjectOfType<MapManager>();
         if (mapManager != null)
         {
@@ -27,7 +29,7 @@ public class UnitCombat : MonoBehaviour
             Debug.LogWarning("MapManager not found in scene!");
         }
 
-        // Find TileHighlighter in the scene
+        
         tileHighlighter = FindObjectOfType<TileHighlighter>();
         if (tileHighlighter == null)
         {
@@ -95,11 +97,11 @@ public class UnitCombat : MonoBehaviour
                 UnitManager targetManager = col.GetComponent<UnitManager>();
                 if (targetUnit != null && targetManager != null && targetManager.GetTeam() != manager.GetTeam())
                 {
-                    return true; // Found valid enemy target
+                    return true; 
                 }
             }
         }
 
-        return false; // No targets found
+        return false; 
     }
 }

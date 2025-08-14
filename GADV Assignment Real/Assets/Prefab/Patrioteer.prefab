@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 4076127530666391549}
   - component: {fileID: 677936334610446467}
   - component: {fileID: 4389724351725296946}
+  - component: {fileID: 3129790009193177645}
   m_Layer: 0
   m_Name: Patrioteer
   m_TagString: Untagged
@@ -103,10 +104,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdec31d9ab2ebfd4ca7259dd669201ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitData: {fileID: 11400000, guid: a7d05663baef6bf4ca57af4c076a8cee, type: 2}
   currentState: 0
   maxHP: 90
   currentHP: 0
-  attack: 25
+  attack: 30
   defense: 0
   movementRange: 2
   attackRange: 3
@@ -218,3 +220,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   terrainTilemap: {fileID: 0}
+--- !u!114 &3129790009193177645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8026510012102574106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87e745f4beb1b8347bdfade73188d32a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverDelay: 2

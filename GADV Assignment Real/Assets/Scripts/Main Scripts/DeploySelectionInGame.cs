@@ -1,10 +1,13 @@
+/// basically, it just takes that data from DeploymentData and spawns the according prefabs with game logic in the gamescene in the recorded positions it has a 
+/// fallback prefab because i was testing it when my prefab assignments  and logic were shakey
+
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class DeploySelectionInGame : MonoBehaviour
 {
     public Tilemap deploymentTilemap;
-    public GameObject unitPrefabFallback; // optional, if UnitData prefab is null
+    public GameObject unitPrefabFallback; 
 
     private TurnManager turnManager;
 
@@ -21,13 +24,13 @@ public class DeploySelectionInGame : MonoBehaviour
 
     private void SpawnDeployedUnits()
     {
-        // Spawn P1's units
+        
         foreach (var info in DeploymentData.Instance.player1Deployed)
         {
             SpawnUnit(info, UnitManager.PlayerTeam.Player1);
         }
 
-        // Spawn P2's units
+        
         foreach (var info in DeploymentData.Instance.player2Deployed)
         {
             SpawnUnit(info, UnitManager.PlayerTeam.Player2);

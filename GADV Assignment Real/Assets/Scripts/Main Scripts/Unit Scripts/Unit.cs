@@ -1,7 +1,12 @@
+///This sceipt basically provides the values for the unit prefabs such as it's state and stats. It also takes charge of combat math and killing itself in destory 
+///gameobject. I used states in enum because i was having a stroke trying to do the clicking logic code and this idea was recommended by both rediit and chatgpt
+///i also made it so the minimum dmg done has to be 3 because of my flat formula and the very real possibility of someone doing 0 damage. last is the vic condition
+///which it needs cuz it calls it after a unit dies since the victory conditions is total annahiliation
 using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
+    public UnitData unitData; 
     public enum UnitState
     {
         Idle,
@@ -28,8 +33,11 @@ public class Unit : MonoBehaviour
 
     public void TakeDamage(int dmg)
     {
-        currentHP -= dmg;
-        Debug.Log($"{gameObject.name} takes {dmg} damage! HP: {currentHP}");
+        
+        int actualDamage = Mathf.Max(dmg, 3);
+
+        currentHP -= actualDamage;
+        Debug.Log($"{gameObject.name} takes {actualDamage} damage! HP: {currentHP}");
 
         if (currentHP <= 0)
         {
@@ -37,6 +45,7 @@ public class Unit : MonoBehaviour
             Die();
         }
     }
+
 
     public void SetState(UnitState newState)
     {

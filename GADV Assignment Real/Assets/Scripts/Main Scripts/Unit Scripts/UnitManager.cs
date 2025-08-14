@@ -1,10 +1,12 @@
+///this just checks what player a unit belongs to and prevents units from acting on an enemy turn.
+
 using UnityEngine;
 
 [RequireComponent(typeof(Unit))]
 public class UnitManager : MonoBehaviour
 {
     public enum PlayerTeam { Player1, Player2 }
-    public PlayerTeam team;  // Assign this in the Inspector!
+    public PlayerTeam team;  
 
     private TurnManager turnManager;
 
@@ -12,11 +14,11 @@ public class UnitManager : MonoBehaviour
     {
         turnManager = FindObjectOfType<TurnManager>();
 
-        // Debug safety check
+        
         if (!turnManager)
             Debug.LogWarning("TurnManager not found!");
 
-        // Debug team assignment
+        
         Debug.Log($"{gameObject.name} assigned to team: {team}");
     }
 

@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 4076127530666391549}
   - component: {fileID: 677936334610446467}
   - component: {fileID: 4389724351725296946}
+  - component: {fileID: -838377101063537104}
   m_Layer: 0
   m_Name: Diesel Templar
   m_TagString: Untagged
@@ -80,8 +81,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Sprite: {fileID: 21300000, guid: 03b4282fc5b6fcc4bb4e07e9fb4c7fd9, type: 3}
-  m_Color: {r: 1, g: 0.5264151, b: 0.5264151, a: 1}
+  m_Sprite: {fileID: 21300000, guid: e1330ba36ca8b1249a1bc71027b1986c, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -103,6 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdec31d9ab2ebfd4ca7259dd669201ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitData: {fileID: 11400000, guid: ccd9b5e8e3d28544caa67193dc565b14, type: 2}
   currentState: 0
   maxHP: 85
   currentHP: 0
@@ -218,3 +220,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   terrainTilemap: {fileID: 0}
+--- !u!114 &-838377101063537104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8026510012102574106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87e745f4beb1b8347bdfade73188d32a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverDelay: 0.5

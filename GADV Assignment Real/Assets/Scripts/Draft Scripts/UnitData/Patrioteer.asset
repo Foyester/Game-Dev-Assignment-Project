@@ -14,8 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Patrioteer
   cost: 4
-  icon: {fileID: 21300000, guid: 0dc8db447c73e1447b1f7f35ad4fc361, type: 3}
+  icon: {fileID: 21300000, guid: 0242d757d236bb948b2f180fa1c3e90f, type: 3}
   prefab: {fileID: 8026510012102574106, guid: 0d8c82dedaa13b143a1ab6b18d8684a0, type: 3}
   maxCopies: 1
+  description: '"If you fight her, you''ll earn the attention of a hundred rifles
+    and a thousand new holes for your blood."'
+  maxHP: 90
+  attack: 30
+  defense: 0
+  movementRange: 2
+  attackRange: 3
   isDeployed: 0
   deployedTile: {x: 0, y: 0, z: 0}

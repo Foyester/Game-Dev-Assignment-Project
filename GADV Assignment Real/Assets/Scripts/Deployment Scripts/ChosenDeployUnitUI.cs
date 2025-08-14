@@ -1,7 +1,9 @@
+///simple script that waits to be called by DeployManager to spawn the prefab with UnitData
+
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems; // Needed for click detection
+using UnityEngine.EventSystems; 
 
 public class ChosenDeployUnitUI : MonoBehaviour, IPointerClickHandler
 {
@@ -20,13 +22,14 @@ public class ChosenDeployUnitUI : MonoBehaviour, IPointerClickHandler
         Debug.Log($"Setup complete for {data.unitName}");
     }
 
-    // This will fire when the UI element is clicked
+    
     public void OnPointerClick(PointerEventData eventData)
     {
         Debug.Log($"UI element clicked: selecting {unitData.unitName}");
         deployManager.SelectUnitToPlace(unitData);
     }
 }
+
 
 
 

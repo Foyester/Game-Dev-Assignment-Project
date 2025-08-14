@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 4076127530666391549}
   - component: {fileID: 677936334610446467}
   - component: {fileID: 4389724351725296946}
+  - component: {fileID: -4659722423479704048}
   m_Layer: 0
   m_Name: LIMBAS CAMPANY FALLBACKKKKKKKKKKKKK
   m_TagString: Untagged
@@ -103,6 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdec31d9ab2ebfd4ca7259dd669201ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitData: {fileID: 11400000, guid: 252d6793cba0b9444b18332d1475bc2d, type: 2}
   currentState: 0
   maxHP: 500
   currentHP: 0
@@ -218,3 +220,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   terrainTilemap: {fileID: 0}
+--- !u!114 &-4659722423479704048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8026510012102574106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87e745f4beb1b8347bdfade73188d32a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  popupUI: {fileID: 1111634327045075103, guid: 58894939e620ff348aa86774c54d7fbe, type: 3}
+  hoverDelay: 2

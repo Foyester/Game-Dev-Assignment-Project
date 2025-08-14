@@ -1,11 +1,14 @@
+/// A script that keeps track of the coordinates of the units location in the deployment phase and keeps itself from evaporting on scene change. List once again 
+/// unit can be repeated.
+
 using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 public class DeploymentInfo
 {
-    public UnitData unitData;      // Which unit this is (reference from DraftData)
-    public Vector3Int gridPosition; // Where it’s placed on the map (tilemap coords)
+    public UnitData unitData;
+    public Vector3Int gridPosition; 
 
     public DeploymentInfo(UnitData data, Vector3Int pos)
     {

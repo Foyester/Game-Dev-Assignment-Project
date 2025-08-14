@@ -1,9 +1,10 @@
+///basically connects the end button to the scripts and resets the states of the units for the next round
 using UnityEngine;
-using UnityEngine.UI; // Needed for UI Button
+using UnityEngine.UI; 
 
 public class TurnController : MonoBehaviour
 {
-    [SerializeField] private Button endTurnButton; // Assign in Inspector
+    [SerializeField] private Button endTurnButton; 
 
     private TurnManager turnManager;
     private Unit[] allUnits;
@@ -28,12 +29,12 @@ public class TurnController : MonoBehaviour
     {
         Debug.Log("Ending turn...");
 
-        // Reset unit states for all units
+        
         allUnits = FindObjectsOfType<Unit>();
 
         foreach (Unit unit in allUnits)
         {
-            // Only reset for the current player's units
+            
             UnitManager unitManager = unit.GetComponent<UnitManager>();
             if (unitManager != null)
             {
@@ -48,7 +49,7 @@ public class TurnController : MonoBehaviour
             }
         }
 
-        // Swap turns
+        
         turnManager.EndTurn();
     }
 }

@@ -1,3 +1,5 @@
+///shitty old script with zero use now
+
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -37,7 +39,7 @@ public class MapManager : MonoBehaviour
             TileBase tile = terrainTilemap.GetTile(pos);
             if (tile != null && !tileData.ContainsKey(pos))
             {
-                // You can customize this by tile name/type
+                
                 tileData[pos] = new TileData
                 {
                     isWalkable = true,
@@ -49,7 +51,7 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    // Full walkability check — tile exists, is walkable, and not occupied
+    
     public bool CanMoveTo(Vector3Int cellPos)
     {
         return tileData.ContainsKey(cellPos)
@@ -82,7 +84,7 @@ public class MapManager : MonoBehaviour
             return tileData[cellPos].movementCost;
         }
 
-        return 99; // Default very high cost if not known
+        return 99; 
     }
 
     public string GetTileType(Vector3Int cellPos)

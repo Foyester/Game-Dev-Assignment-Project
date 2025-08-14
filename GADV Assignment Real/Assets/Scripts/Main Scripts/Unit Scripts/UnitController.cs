@@ -1,3 +1,8 @@
+///agony manifest cuz the mouse logic is unpleasant. I used a 'state' system to manages a unit behavior during its turn so clicks don't cause the different 
+///calls to override each other. And in the end, i just forced it so movement has to be done before the attacking logic can be started. In hindsight, i would've 
+///prolly added a button system to select what state you want to be in but time is lacking so no. It also forcefully ends the unit state if there isnt any enemies 
+///in attack range since without it, i couldn't end the turn if i misclicked a unit with no targets in range.
+
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -11,7 +16,8 @@ public class UnitController : MonoBehaviour
     private UnitCombat combat;
     private TileHighlighter tileHighlighter;
     private Tilemap tilemap;
-    private bool movementFinishedHandled = false;
+
+    private Unit.UnitState lastState; 
 
     private void Start()
     {
@@ -19,68 +25,116 @@ public class UnitController : MonoBehaviour
         unitManager = GetComponent<UnitManager>();
         mover = GetComponent<UnitMover>();
         combat = GetComponent<UnitCombat>();
-
         tileHighlighter = FindObjectOfType<TileHighlighter>();
         tilemap = GameObject.Find("Ground Tilemap").GetComponent<Tilemap>();
+
+        if (!tileHighlighter) Debug.LogWarning("[UnitController] TileHighlighter not found!");
+        if (!tilemap) Debug.LogWarning("[UnitController] Ground Tilemap not found!");
+
+        lastState = unit.currentState;
+        Debug.Log($"[UnitController] {name} initialized. Starting state = {lastState}");
+    }
+
+    private void Update()
+    {
+        
+        if (unit.currentState != lastState)
+        {
+            OnStateChanged(lastState, unit.currentState);
+            lastState = unit.currentState;
+        }
+
+        
+        switch (unit.currentState)
+        {
+            case Unit.UnitState.Moving:
+                mover.HandleMovementInput();
+                if (mover.hasFinishedMoving)
+                {
+                    Debug.Log($"[UnitController] {name} finished moving, checking attack state...");
+                    TryEnterAttackState();
+                }
+                break;
+
+            case Unit.UnitState.Attacking:
+                combat.HandleAttackInput();
+                break;
+
+                
+        }
     }
 
     private void OnMouseDown()
     {
         if (!unitManager.CanActThisTurn())
         {
-            Debug.Log("Not your turn.");
+            Debug.Log($"[UnitController] {name}: Not your turn.");
             return;
         }
 
         if (unit.currentState == Unit.UnitState.Idle)
         {
-            Vector3Int cellPos = tilemap.WorldToCell(transform.position);
-            Debug.Log($"Highlighting movement range for {unit.name} at {cellPos} with range {unit.movementRange}");
-            tileHighlighter.HighlightArea(cellPos, unit.movementRange, tileHighlighter.movementTile);
-
+            
+            Debug.Log($"[UnitController] {name}: Selected. Entering Moving state.");
             unit.SetState(Unit.UnitState.Moving);
-            mover.PrepareForMovement();
         }
     }
 
-    private void Update()
+   
+    private void OnStateChanged(Unit.UnitState oldState, Unit.UnitState newState)
     {
-        if (unit.currentState == Unit.UnitState.Moving)
-        {
-            mover.HandleMovementInput();
+        Debug.Log($"[UnitController] {name}: State change {oldState} -> {newState}");
 
-            if (mover.hasFinishedMoving && !movementFinishedHandled)
-            {
-                movementFinishedHandled = true;
-                TryEnterAttackState();
-            }
-        }
-        else if (unit.currentState == Unit.UnitState.Attacking)
-        {
-            combat.HandleAttackInput();
+        
+        if (tileHighlighter) tileHighlighter.ClearHighlights();
 
-            // Highlight attack range while attacking
-            Vector3Int cellPos = tilemap.WorldToCell(transform.position);
-            tileHighlighter.HighlightArea(cellPos, unit.attackRange, tileHighlighter.attackTile);
-        }
-        else
+        switch (newState)
         {
-            movementFinishedHandled = false; // reset when not moving
+            case Unit.UnitState.Moving:
+                {
+                    
+                    mover.PrepareForMovement(); 
+                    Vector3Int cellPos = tilemap.WorldToCell(transform.position);
+                    Debug.Log($"[UnitController] {name}: Drawing movement range from {cellPos} (range {unit.movementRange})");
+                    tileHighlighter.HighlightArea(cellPos, unit.movementRange, tileHighlighter.movementTile, true); 
+                    break;
+                }
+
+            case Unit.UnitState.Attacking:
+                {
+                    
+                    Vector3Int cellPos = tilemap.WorldToCell(transform.position);
+                    Debug.Log($"[UnitController] {name}: Drawing attack range from {cellPos} (range {unit.attackRange})");
+                    tileHighlighter.HighlightArea(cellPos, unit.attackRange, tileHighlighter.attackTile, false); 
+                    break;
+                }
+
+            case Unit.UnitState.Done:
+            case Unit.UnitState.Idle:
+            default:
+                
+                break;
         }
     }
 
+   
     private void TryEnterAttackState()
     {
-        if (combat.HasValidTargets())  // Make sure this returns true if enemies are in range
+        if (combat.HasValidTargets())
         {
+            Debug.Log($"[UnitController] {name}: Valid targets found. Entering Attacking.");
             unit.SetState(Unit.UnitState.Attacking);
-            Debug.Log($"{unit.name} entered attack state.");
         }
         else
         {
+            Debug.Log($"[UnitController] {name}: No targets. Ending turn (Done).");
             unit.SetState(Unit.UnitState.Done);
-            Debug.Log($"{unit.name} has no targets and ends its turn.");
         }
     }
 }
+
+
+
+
+
 

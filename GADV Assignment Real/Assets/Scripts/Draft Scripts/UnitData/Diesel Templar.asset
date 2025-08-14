@@ -14,8 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Diesel Templar
   cost: 3
-  icon: {fileID: 21300000, guid: 03b4282fc5b6fcc4bb4e07e9fb4c7fd9, type: 3}
+  icon: {fileID: 21300000, guid: e1330ba36ca8b1249a1bc71027b1986c, type: 3}
   prefab: {fileID: 8026510012102574106, guid: 5f2f6527e2713a745a0cb8a2d803d211, type: 3}
   maxCopies: 2
+  description: An old enemy of the Empire, reactivated to fight for it's nation once
+    more.
+  maxHP: 85
+  attack: 20
+  defense: 10
+  movementRange: 3
+  attackRange: 1
   isDeployed: 0
   deployedTile: {x: 0, y: 0, z: 0}

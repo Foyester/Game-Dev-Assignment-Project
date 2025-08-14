@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 4076127530666391549}
   - component: {fileID: 677936334610446467}
   - component: {fileID: 4389724351725296946}
+  - component: {fileID: 6211899373288075892}
   m_Layer: 0
   m_Name: Crownsworn
   m_TagString: Untagged
@@ -80,8 +81,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Sprite: {fileID: 21300000, guid: 285ac985014f7344a97c433c816f8ec2, type: 3}
-  m_Color: {r: 1, g: 0.48867923, b: 0.48867923, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 033639aafe547dc4c8f4280d9a09db7a, type: 3}
+  m_Color: {r: 0.7254902, g: 0.7254902, b: 0.7254902, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -103,6 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdec31d9ab2ebfd4ca7259dd669201ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitData: {fileID: 11400000, guid: 9ac747fe2c87a4a418e1906eb9e77c2a, type: 2}
   currentState: 0
   maxHP: 70
   currentHP: 0
@@ -218,3 +220,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   terrainTilemap: {fileID: 0}
+--- !u!114 &6211899373288075892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8026510012102574106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87e745f4beb1b8347bdfade73188d32a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverDelay: 0.5

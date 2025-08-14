@@ -1,3 +1,11 @@
+///This is a fairly meaty script because i kinda stopped following ORP laws after the first scene. This scene manages a lot of things tied to the deployment 
+///logic during the deployment scene. It has two tilemaps to refer to for where the player can deploy since not only is it less tedious to code manually but also
+///allows me to change the zones if needed by simply editing the map. This idea of adjustable locations also applies to the camera and it's empty game object positioners
+///taken using inspiration from the dropper game. I've used a dictonary to keep track of the unit locations to prevent double stacks and allow for recall
+///unlike an array that  would prolly combust with the idea of removal. I've also created UI prefabs rather than spawing the actual prefabs with logic in them out of fear 
+///that their logic would break the scene and class with existing code. Alot of debug logs for checking what broke as well.
+
+
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -21,7 +29,7 @@ public class DeploymentManager : MonoBehaviour
     [Header("UI")]
     public Transform unitUIPanel;
     public GameObject unitUIElementPrefab;
-    public Button confirmButton; // <-- New: assign in Inspector
+    public Button confirmButton; 
 
     private int currentPlayer = 1;
     private List<UnitData> player1Units;

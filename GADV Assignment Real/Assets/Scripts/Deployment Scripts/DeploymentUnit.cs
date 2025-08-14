@@ -1,3 +1,4 @@
+///Renders sprite and scales it manaully
 using UnityEngine;
 
 public class DeploymentUnit : MonoBehaviour

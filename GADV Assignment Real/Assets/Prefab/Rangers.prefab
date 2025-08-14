@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 4076127530666391549}
   - component: {fileID: 677936334610446467}
   - component: {fileID: 4389724351725296946}
+  - component: {fileID: -6490346390100708420}
   m_Layer: 0
   m_Name: Rangers
   m_TagString: Untagged
@@ -80,7 +81,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Sprite: {fileID: 21300000, guid: 285ac985014f7344a97c433c816f8ec2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0ae4e0e1a2e355a49af957d78d53fd73, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -103,6 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdec31d9ab2ebfd4ca7259dd669201ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitData: {fileID: 11400000, guid: 2816472eca6b4bf40813f5af162eeb7a, type: 2}
   currentState: 0
   maxHP: 45
   currentHP: 0
@@ -218,3 +220,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   terrainTilemap: {fileID: 0}
+--- !u!114 &-6490346390100708420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8026510012102574106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87e745f4beb1b8347bdfade73188d32a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverDelay: 0.5

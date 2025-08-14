@@ -1,3 +1,6 @@
+///this just stores the units selected in the drafting stage of the game for each player and stops it from being destoryed on scene change. 
+///list was used since a unit could be selected more than once so yeah. and it wasn't storing any other data other than the choice so.
+
 using System.Collections.Generic;
 using UnityEngine;
 
